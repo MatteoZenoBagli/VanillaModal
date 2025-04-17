@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="it">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Simple modal</title>
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
+            body {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                min-height: 100vh;
+                background-color: #f5f5f5;
+                padding: 1.5rem;
+            }
+
+            .container {
+                max-width: 800px;
+                width: 100%;
+                text-align: center;
+            }
+
+            h1 {
+                margin-bottom: 1.5rem;
+                color: #333;
+            }
+
+            button {
+                padding: 0.75rem 1.5rem;
+                background-color: #4a6df0;
+                color: white;
+                border: none;
+                border-radius: 0.25rem;
+                cursor: pointer;
+                font-size: 16px;
+                transition: background-color 0.3s;
+            }
+
+            button#openModal {
+                margin-top: 1rem;
+            }
+
+            button:hover {
+                background-color: #3252d9;
+            }
+
+            .modal-overlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0, 0, 0, 0.5);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                z-index: 100;
+                opacity: 0;
+                visibility: hidden;
+                transition: opacity 0.3s, visibility 0.3s;
+            }
+
+            .modal-overlay.active {
+                opacity: 1;
+                visibility: visible;
+            }
+
+            .modal {
+                padding: 1rem;
+                background-color: white;
+                width: 90%;
+                max-width: 500px;
+                border-radius: 0.5rem;
+                padding: rem;
+                position: relative;
+                transform: scale(0.8);
+                transition: transform 0.3s;
+                box-shadow: 0 0.125rem 1.5rem rgba(0, 0, 0, 0.15);
+            }
+
+            .modal-overlay.active .modal {
+                transform: scale(1);
+            }
+
+            .modal-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 1.5rem;
+            }
+
+            .modal-title {
+                font-size: 1.5rem;
+                color: #333;
+            }
+
+            .modal-close {
+                background: none;
+                border: none;
+                font-size: 24px;
+                cursor: pointer;
+                color: #777;
+                padding: 0;
+                width: 2rem;
+                height: 2rem;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                transition: color 0.3s;
+            }
+
+            .modal-close:hover {
+                color: #333;
+            }
+
+            .modal-content {
+                margin-bottom: 1.5rem;
+                line-height: 1.6;
+                color: #444;
+            }
+
+            .modal-footer {
+                display: flex;
+                justify-content: flex-end;
+                gap: 0.5rem;
+            }
+
+            .btn-secondary {
+                background-color: #6c757d;
+            }
+
+            .btn-secondary:hover {
+                background-color: #5a6268;
+            }
+
+            .btn-primary {
+                background-color: #4a6df0;
+            }
+
+            .btn-primary:hover {
+                background-color: #3252d9;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1>Example of simple Vanilla JS Modal</h1>
+            <p>Click the button to open the modal:</p>
+            <button id="openModal">Open Modal</button>
+        </div>
+
+        <div class="modal-overlay" id="modalOverlay">
+            <div class="modal">
+                <div class="modal-header">
+                    <h2 class="modal-title">Title of the Modal</h2>
+                    <button class="modal-close" id="closeModalX">
+                        &times;
+                    </button>
+                </div>
+                <div class="modal-content">
+                    <p>
+                        This is an example of modal window create by using just
+                        Vanilla JS and CSS, without external libraries as
+                        Bootstrap.
+                    </p>
+                    <p>
+                        You can close the modal by clicking one of the buttons
+                        under, the <code>X</code> in the top right corner, or clicking
+                        outside the modal itself.
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn-secondary" id="closeModal">Close</button>
+                    <button class="btn-primary" id="acceptModal">Accept</button>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            const openModalBtn = document.getElementById('openModal');
+            const modalOverlay = document.getElementById('modalOverlay');
+            const closeModalBtn = document.getElementById('closeModal');
+            const closeModalXBtn = document.getElementById('closeModalX');
+            const acceptModalBtn = document.getElementById('acceptModal');
+
+            function openModal() {
+                modalOverlay.classList.add('active');
+                // Deny scrolling in the page under
+                document.body.style.overflow = 'hidden';
+            }
+
+            function closeModal() {
+                modalOverlay.classList.remove('active');
+                // Allow scrolling in the page under
+                document.body.style.overflow = 'auto';
+            }
+
+            openModalBtn.addEventListener('click', openModal);
+            closeModalBtn.addEventListener('click', closeModal);
+            closeModalXBtn.addEventListener('click', closeModal);
+            acceptModalBtn.addEventListener('click', () => {
+                closeModal();
+            });
+
+            modalOverlay.addEventListener('click', (event) => {
+                if (event.target === modalOverlay) closeModal();
+            });
+
+            document.addEventListener('keydown', (event) => {
+                if (event.key !== 'Escape') return;
+                if (!modalOverlay.classList.contains('active')) return;
+                closeModal();
+            });
+        </script>
+    </body>
+</html>
